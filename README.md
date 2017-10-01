@@ -1,2 +1,2 @@
 # freecodecamp
-My solutions for freeCodeCamp coding challenges
+My solutions for [freeCodeCamp](https://www.freecodecamp.org/) coding challenges
