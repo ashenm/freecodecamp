@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="description" content="Search Wikipedia entries" />
+  <meta name="author" content="Ashen M. Gunaratne" />
+  <title>Wiki Search</title>
+  <script>
+
+    // Global configuration
+    const endpoint = 'https://en.wikipedia.org/w/api.php';
+    const useragent = 'Wiki Search/1.0 (https://codepen.io/ashenmg/full/xEwxpE; mail@ashenmm.ml)';
+
+  </script>
+</head>
+<body>
+  <header>
+    <h1>Wiki Search</h1>
+  </header>
+  <main>
+    <form name="search">
+      <input type="search" name="q" placeholder="Search Wikipedia" />
+      <br />
+      <input type="submit" value="Search Wiki" />
+      <input type="button" name="rnd" value="Random Wiki" />
+    </form>
+  </main>
+  <footer>
+  </footer>
+  <script>
+
+    // Search Wiki: Search wikipedia for a user specific entry
+    document.forms.search.onsubmit = function() {
+
+      // an XMLHttpRequest
+      let xhr = null;
+
+      // instantiate XMLHttpRequest object
+      try {
+        xhr = new XMLHttpRequest();
+      } catch (e) {
+        xhr = new ActiveXObject('Microsoft.XMLHTTP');
+      }
+
+      // handle incompatible browsers
+      if (xhr === null) {
+        console.log('Ajax instantiation failed!');
+        return false;
+      }
+
+      //TODO construct URL
+      const url = `${endpoint}?action=query&grsearch=${this.q.value}&format=json`;
+
+      xhr.responseType = 'json';
+      xhr.setRequestHeader(
+        'Api-User-Agent', useragent
+      );
+
+      // response handler
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4) {
+          if (xhr.status == 200) {
+            //TODO Render search hits
+            console.log(xhr.response);
+          } else {
+            console.log('Error with Ajax call!');
+          }
+        }
+      }
+
+      xhr.open('GET', url, true);
+      xhr.send(null);
+
+      // avoid self form submission
+      return false;
+
+    };
+
+    // Random Wiki: Opens a random Wikipedia article
+    document.forms.search.rnd.onclick = function() {
+      window.open('https://en.wikipedia.org/wiki/Special:Random');
+    };
+
+  </script>
+</body>
+</html>
