@@ -12,10 +12,9 @@ function sumFibs(num) {
   let adjacent = 1;
   let accumulate = current;
   while (adjacent <= num) {
-    const subsequent = current + adjacent;
-    accumulate += (adjacent % 2 === 0) ? 0 : adjacent;
-    current = adjacent;
-    adjacent = subsequent;
+    accumulate += (adjacent % 2 !== 0) ? adjacent : 0;
+    adjacent += current;
+    current = adjacent - current;
   }
   return accumulate;
 }

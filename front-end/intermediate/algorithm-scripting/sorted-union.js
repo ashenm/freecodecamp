@@ -9,17 +9,17 @@
 
 function uniteUnique(arr) {
 
-  // convert arguments object to an array
-  argv = Array.from(arguments);
+  let argv = []
 
-  var unique = argv.reduce((accumulator, currentValue, currentIndex, array) => {
-    currentValue.forEach(element => {
-      if (accumulator.indexOf(element) === -1) {
-        accumulator.push(element);
-      }
-    });
-    return accumulator;
-  }, argv.shift());
+  // extract arguments object to an array
+  for (let i = 0; i < arguments.length; i++) {
+    argv = argv.concat(arguments[i]);
+  }
+
+  // filter duplicates
+  let unique = argv.filter((element, index) => {
+    return argv.indexOf(element) === index;
+  });
 
   return unique;
 

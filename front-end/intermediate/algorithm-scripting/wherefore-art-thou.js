@@ -9,23 +9,17 @@
 
 function whatIsInAName(collection, source) {
   // What's in a name?
-  var arr = [];
+  let arr = [];
   // Only change code below this line
 
   // extract property keys
-  var keys = Object.keys(source);
-  var len = keys.length;
+  let keys = Object.keys(source);
 
   // append to new array if property and value exsists
   arr = collection.filter(function(object) {
-    var i = 0;
-    while (i < len) {
-      if (source[keys[i]] !== object[keys[i]]) {
-        return false;
-      }
-      i++;
-    }
-    return true;
+    return keys.every((key) => {
+      return source[key] === object[key];
+    });
   });
   
   // Only change code above this line

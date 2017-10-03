@@ -7,21 +7,15 @@
  *
  */
 
+const entities = {
+  '&': '&amp;',
+  '<': '&lt',
+  '>': '&gt',
+  '"': '&quot;',
+  '\'': '&apos;'
+};
+
 function convertHTML(str) {
   // &colon;&rpar;
-  const reg = /[\&\<\>\"\']/g;
-  return str.replace(reg, (match) => {
-    switch (match) {
-      case '&':
-        return '&amp;';
-      case '<':
-        return '&lt;';
-      case '>':
-        return '&gt;';
-      case '"':
-        return '&quot;';
-      case '\'':
-        return '&apos;';
-    }
-  });
+  return str.split('').map((char) => entities[char] || char);
 }

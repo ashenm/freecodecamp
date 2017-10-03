@@ -7,25 +7,13 @@
  *
  */
 
- function pairElement(str) {
-  pairs = [];
-  str.toUpperCase().split('').forEach((base, index, array) => {
-    switch (base) { 
-      case 'A':
-        pairs.push([base, 'T']);
-        break;
-      case 'C':
-        pairs.push([base, 'G']);
-        break;
-      case 'G':
-        pairs.push([base, 'C']);
-        break;
-      case 'T':
-        pairs.push([base, 'A']);
-        break;
-      default:
-        throw new Error(`Invalid nucleobase '${base}' at index ${index}!`);
-    }
-  });
-  return pairs;
+const pairs = {
+  A: 'A',
+  C: 'C',
+  G: 'T',
+  T: 'G'
+};
+
+function pairElement(str) {
+  return str.split('').map(base => [base, pairs[base]]);
 }
