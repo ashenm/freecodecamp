@@ -10,8 +10,8 @@
 function smallestCommons(arr) {
 
   // range
-  let min = Math.min.apply(undefined, arr);
-  let max = Math.max.apply(undefined, arr);
+  let min = Math.min.apply(null, arr);
+  let max = Math.max.apply(null, arr);
 
   let smallestCommon = lcm(min, min + 1);
 
@@ -22,6 +22,7 @@ function smallestCommons(arr) {
 
   return smallestCommon;
 }
+
 
 /**
  * Calculates Greatest Common Divisor
@@ -35,6 +36,7 @@ function gcd(a, b) {
   }
   return a;
 }
+
 
 /**
  * Calculates Least Common Multiple
