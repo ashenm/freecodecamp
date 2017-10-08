@@ -12,25 +12,24 @@ function updateInventory(arr1, arr2) {
 
   const inventory = Array.prototype.concat.apply([], arr1);
   
-  delivery:
-    for (let i = 0; i < arr2.length; i++) {
+  for (let i = 0; i < arr2.length; i++) {
 
-      // extract item properties for easy reference
-      const item = arr2[i][1];
-      const quantity = arr2[i][0];
+    // extract item properties for easy reference
+    const item = arr2[i][1];
+    const quantity = arr2[i][0];
 
-      // check if item already exsists in inventory
-      const position = inventory.indexOf(item);
+    // check if item already exsists in inventory
+    const position = inventory.indexOf(item);
 
-      // exsisting item: update quantity
-      if (position !== -1) {
-        const row = Math.floor(position / 2);
-        arr1[row][0] += quantity;
-        continue delivery;
-      }
+    // exsisting item: update quantity
+    if (position !== -1) {
+      const row = Math.floor(position / 2);
+      arr1[row][0] += quantity;
+      continue;
+    }
 
-      // alien item: add to inventory
-      arr1.push([quantity, item]);
+    // alien item: add to inventory
+    arr1.push([quantity, item]);
 
     }
 
