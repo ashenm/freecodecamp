@@ -18,7 +18,7 @@ function updateInventory(arr1, arr2) {
     const item = arr2[i][1];
     const quantity = arr2[i][0];
 
-    // check if item already exsists in inventory
+    // check if item already exists in inventory
     const position = inventory.indexOf(item);
 
     // exsisting item: update quantity
