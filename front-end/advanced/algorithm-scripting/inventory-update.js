@@ -9,6 +9,8 @@
 
 function updateInventory(arr1, arr2) {
   // All inventory must be accounted for or you're fired!
+
+  const inventory = Array.prototype.concat.apply([], arr1);
   
   delivery:
     for (let i = 0; i < arr2.length; i++) {
@@ -17,12 +19,14 @@ function updateInventory(arr1, arr2) {
       const item = arr2[i][1];
       const quantity = arr2[i][0];
 
-      // update quantity if item already exists in inventory
-      for (let j = 0; j < arr1.length; j++) {
-        if (arr1[j][1] === item) {
-          arr1[j][0] += quantity;
-          continue delivery;
-        }
+      // check if item already exsists in inventory
+      const position = inventory.indexOf(item);
+
+      // exsisting item: update quantity
+      if (position !== -1) {
+        const row = Math.floor(position / 2);
+        arr1[row][0] += quantity;
+        continue delivery;
       }
 
       // alien item: add to inventory
