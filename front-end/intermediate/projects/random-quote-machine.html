@@ -1,0 +1,113 @@
+<!--
+
+  Build a Random Quote Machine
+  https://codepen.io/ashenm/pen/GjJxRO
+  https://www.freecodecamp.org/challenges/build-a-random-quote-machine
+
+  Ashen Gunaratne
+  mail@ashenm.ml
+
+-->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta content="A random quote generator" name="description" />
+  <meta content="ashen m. gunaratne freecodecamp projects intermediate" name="keywords" />
+  <meta content="Ashen Gunaratne" name="author" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <title>Random Quote Machine</title>
+  <link id="favicon" rel="icon" type="image/png" href="" />
+  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous" />
+  <style type="text/css">
+
+    main {
+      /* center contents */
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+    }
+
+    .card {
+      width: 50%;
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: 10px;
+    }
+
+  </style>
+  <script type="text/javascript">
+
+    const endpoint = 'en.wikiquote.org/w/api.php';
+    const parameters = '?action=query&format=json';
+    const twitter = 'https://twitter.com/intent/tweet?text=';
+
+    // on DOM ready
+    document.onreadystatechange = () => {
+      if (document.readyState === 'interactive') {
+
+        // reference
+        container = document.getElementsByClassName('card')[0];
+
+        // initial view
+        generate();
+
+        // generate handler
+        document.getElementById('generate').onclick = generate;
+
+        // tweet handler
+        document.getElementById('tweet').onclick = () => {
+          window.open(
+            `${twitter}${container.children[0].innerText} -${container.children[1].innerText}`);
+        }
+ 
+      }
+    };
+
+    /**
+     * Retrieve a random quote from wikiquote.org
+     */
+    function generate() {
+
+      // instantiate XMLHttpRequest object
+      const xhr = new XMLHttpRequest();
+
+      // construct url
+      const url = endpoint + parameters;
+
+      // http headers
+      xhr.setRequestHeader('Api-User-Agent', 'Random-Quote-Machine/0.1');
+
+      // get quote
+      xhr.responseType = 'json';
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+          container.children[0].innerHTML = xhr.response.someproperty;
+          container.children[1].innerHTML = xhr.response.someproperty;
+        }
+      };
+      xhr.open('GET', url);
+      xhr.send(null);
+
+    }
+    
+  </script>
+</head>
+<body>
+  <header>
+    <h1 class="h4 text-center">Random Quote Machine</h1>
+  </header>
+  <main>
+    <div class="card p-3">
+      <blockquote class="blockquote mb-0"></blockquote>
+      <footer class="blockquote-footer">
+        <small></small>
+      </footer>
+    </div>
+    <button id="generate" type="button" class="btn btn-default">Generate</button>
+    <button id="tweet" type="button" class="btn btn-default">Tweet</button>
+  </main>
+  <footer>
+  </footer>
+</body>
+</html>

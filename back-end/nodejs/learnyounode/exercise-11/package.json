@@ -1,0 +1,15 @@
+{
+  "name": "exercise-11",
+  "version": "1.0.0",
+  "description": "A HTTP server that converts incoming POST request body characters to uppercase",
+  "main": "app.js",
+  "dependencies": {
+    "through2-map": "^3.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ashen Gunaratne",
+  "license": "ISC"
+}
