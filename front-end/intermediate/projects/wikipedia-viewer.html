@@ -5,11 +5,62 @@
   <meta name="description" content="Search Wikipedia entries" />
   <meta name="author" content="Ashen M. Gunaratne" />
   <title>Wiki Search</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous" />
+  <style type="text/css">
+
+    img {
+      width: 10%;
+    }
+
+  </style>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
   <script>
 
     // Global configuration
+    const origin = '*';
     const endpoint = 'https://en.wikipedia.org/w/api.php';
-    const useragent = 'Wiki Search/1.0 (https://codepen.io/ashenmg/full/xEwxpE; mail@ashenmm.ml)';
+    const useragent = 'Wiki Search/1.0 (https://codepen.io/ashenmg/full/xEwxpE; hosting@ashenmm.ml)';
+
+    $(function() {
+
+      // Search Wiki: Search wikipedia for a user specific entry
+      // TODO handle empty submits
+      $('form').submit(function() {
+        $.getJSON(
+          `${endpoint}?action=opensearch&format=json&origin=${origin}&search=${this.q.value}&namespace=0`,
+          render);
+        return false;
+      });
+
+      // Random Wiki: Opens a random Wikipedia article
+      $('input[name=random]').click(function() {
+        window.open('https://en.wikipedia.org/wiki/Special:Random');
+      });
+
+      // Bootstrap Modal Hook: Clear DOM insertions
+      $('#results').on('hidden.bs.modal', function() {
+        $('.modal-body').empty();
+        $('#progress').css('display', 'block');
+      });
+
+    });
+
+    function render(data) {
+
+      // data indexes
+      const title = 1, descs = 2, links = 3;
+
+      // remove progress indicator and show title
+      $('#progress').css('display', 'none');
+
+      // render modal content
+      data[descs].forEach((link, index) => {
+        $('.modal-body').append(`<div><a href="${link}">${data[title][index]}</a><p>${data[descs][index]}</p></div>`);
+      });
+
+    }
 
   </script>
 </head>
@@ -18,69 +69,27 @@
     <h1>Wiki Search</h1>
   </header>
   <main>
-    <form name="search">
+    <form>
       <input type="search" name="q" placeholder="Search Wikipedia" />
-      <br />
-      <input type="submit" value="Search Wiki" />
-      <input type="button" name="rnd" value="Random Wiki" />
+      <input type="submit" value="Search Wiki" data-toggle="modal" data-target="#results" />
+      <input type="button" name="random" value="Random Wiki" />
     </form>
+
+    <!-- Model for Search Results -->
+    <div id="results" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="wiki search results" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <div id="progress" class="text-center">
+              <img alt="Loading Content..." src="http://neurons.ee.ethz.ch/public/static/inprogress.gif" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </main>
   <footer>
   </footer>
-  <script>
-
-    // Search Wiki: Search wikipedia for a user specific entry
-    document.forms.search.onsubmit = function() {
-
-      // an XMLHttpRequest
-      let xhr = null;
-
-      // instantiate XMLHttpRequest object
-      try {
-        xhr = new XMLHttpRequest();
-      } catch (e) {
-        xhr = new ActiveXObject('Microsoft.XMLHTTP');
-      }
-
-      // handle incompatible browsers
-      if (xhr === null) {
-        console.log('Ajax instantiation failed!');
-        return false;
-      }
-
-      //TODO construct URL
-      const url = `${endpoint}?action=query&grsearch=${this.q.value}&format=json`;
-
-      xhr.responseType = 'json';
-      xhr.setRequestHeader(
-        'Api-User-Agent', useragent
-      );
-
-      // response handler
-      xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4) {
-          if (xhr.status == 200) {
-            //TODO Render search hits
-            console.log(xhr.response);
-          } else {
-            console.log('Error with Ajax call!');
-          }
-        }
-      }
-
-      xhr.open('GET', url, true);
-      xhr.send(null);
-
-      // avoid self form submission
-      return false;
-
-    };
-
-    // Random Wiki: Opens a random Wikipedia article
-    document.forms.search.rnd.onclick = function() {
-      window.open('https://en.wikipedia.org/wiki/Special:Random');
-    };
-
-  </script>
 </body>
 </html>
