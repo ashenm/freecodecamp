@@ -9,7 +9,7 @@
   <style type="text/css">
 
     main {
-      margin-top: 256px;
+      margin-top: 36vh;
     }
 
     img {
@@ -37,17 +37,19 @@
       // Search Wiki: Search wikipedia for a user specific entry
       // TODO handle empty submits
 
-      const query = this.q.value;
-
-      if (!query) {
-        return false;
-      }
-
       $('form').submit(function() {
+
+        const query = this.q.value;
+
+        // TODO handle empty queries
+        if (!query)
+          return false;
+
         $.getJSON(
           `${endpoint}?action=opensearch&format=json&origin=${origin}&search=${query}&namespace=0`,
           render);
         return false;
+
       });
 
       // Random Wiki: Opens a random Wikipedia article
@@ -57,6 +59,7 @@
 
       // Bootstrap Modal Hook: Clear DOM insertions
       $('#results').on('hidden.bs.modal', function() {
+        $(':input[name=q]').val('');
         $('.modal-body div:last-child').empty();
         $('.modal-body div:first-child').css('display', 'block');
       });
