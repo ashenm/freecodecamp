@@ -86,14 +86,14 @@
     });
 
     /**
-     * Append data to predefined Modal
+     * Populate data to predefined Modal
      */
     function render(data) {
 
       // data indexes
       const title = 1, descs = 2, links = 3;
 
-      // remove progress indicator and show title
+      // hide progress indicator
       $('.modal-body div:first-child').css('display', 'none');
 
       // render modal content
@@ -106,10 +106,8 @@
   </script>
 </head>
 <body>
-  <div class="container-fluid">
-    <header>
-    </header>
-    <main>
+  <main>
+    <div class="container-fluid">
       <form>
         <div class="form-group row justify-content-center">
           <input type="search" name="q" class="form-control col-5" placeholder="Search Wikipedia" />
@@ -133,10 +131,7 @@
           </div>
         </div>
       </div>
-
-    </main>
-    <footer>
-    </footer>
-  </div>
+    </div>
+  </main>
 </body>
 </html>
