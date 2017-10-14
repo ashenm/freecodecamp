@@ -8,8 +8,17 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous" />
   <style type="text/css">
 
+    main {
+      margin-top: 256px;
+    }
+
     img {
       width: 10%;
+    }
+
+    input {
+      margin-left: 9px;
+      margin-right: 9px;
     }
 
   </style>
@@ -65,31 +74,36 @@
   </script>
 </head>
 <body>
-  <header>
-    <h1>Wiki Search</h1>
-  </header>
-  <main>
-    <form>
-      <input type="search" name="q" placeholder="Search Wikipedia" />
-      <input type="submit" value="Search Wiki" data-toggle="modal" data-target="#results" />
-      <input type="button" name="random" value="Random Wiki" />
-    </form>
+  <div class="container">
+    <header>
+    </header>
+    <main>
+      <form>
+        <div class="form-group row justify-content-center">
+          <input type="search" name="q" class="form-control col-6" placeholder="Search Wikipedia" />
+        </div>
+        <div class="form-group row justify-content-center">
+          <input type="submit" class="btn btn-default col-2" value="Search Wiki" data-toggle="modal" data-target="#results" />
+          <input type="button" class="btn btn-default col-2" name="random" value="Random Wiki" />
+        </div>
+      </form>
 
-    <!-- Model for Search Results -->
-    <div id="results" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="wiki search results" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-body">
-            <div id="progress" class="text-center">
-              <img alt="Loading Content..." src="http://neurons.ee.ethz.ch/public/static/inprogress.gif" />
+      <!-- Model for Search Results -->
+      <div id="results" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="wiki search results" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-body">
+              <div id="progress" class="text-center">
+                <img alt="searching" src="http://neurons.ee.ethz.ch/public/static/inprogress.gif" />
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-  </main>
-  <footer>
-  </footer>
+    </main>
+    <footer>
+    </footer>
+  </div>
 </body>
 </html>
