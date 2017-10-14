@@ -36,9 +36,16 @@
 
       // Search Wiki: Search wikipedia for a user specific entry
       // TODO handle empty submits
+
+      const query = this.q.value;
+
+      if (!query) {
+        return false;
+      }
+
       $('form').submit(function() {
         $.getJSON(
-          `${endpoint}?action=opensearch&format=json&origin=${origin}&search=${this.q.value}&namespace=0`,
+          `${endpoint}?action=opensearch&format=json&origin=${origin}&search=${query}&namespace=0`,
           render);
         return false;
       });
@@ -50,8 +57,8 @@
 
       // Bootstrap Modal Hook: Clear DOM insertions
       $('#results').on('hidden.bs.modal', function() {
-        $('.modal-body').empty();
-        $('#progress').css('display', 'block');
+        $('.modal-body div:last-child').empty();
+        $('.modal-body div:first-child').css('display', 'block');
       });
 
     });
@@ -62,11 +69,11 @@
       const title = 1, descs = 2, links = 3;
 
       // remove progress indicator and show title
-      $('#progress').css('display', 'none');
+      $('.modal-body div:first-child').css('display', 'none');
 
       // render modal content
-      data[descs].forEach((link, index) => {
-        $('.modal-body').append(`<div><a href="${link}">${data[title][index]}</a><p>${data[descs][index]}</p></div>`);
+      data[links].forEach((link, index) => {
+        $('.modal-body div:last-child').append(`<div><a href="${link}" target="_blank">${data[title][index]}</a><p>${data[descs][index]}</p></div>`);
       });
 
     }
@@ -93,9 +100,10 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-body">
-              <div id="progress" class="text-center">
-                <img alt="searching" src="http://neurons.ee.ethz.ch/public/static/inprogress.gif" />
+              <div class="text-center">
+                <img alt="searching" src="https://media.giphy.com/media/wgXkLPkEmPKsU/giphy.gif" />
               </div>
+              <div></div>
             </div>
           </div>
         </div>
