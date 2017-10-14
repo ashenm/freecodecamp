@@ -23,7 +23,7 @@
     }
 
     img {
-      width: 10%;
+      width: 5%;
     }
 
     input {
@@ -42,11 +42,12 @@
     const endpoint = 'https://en.wikipedia.org/w/api.php';
     const useragent = 'Wiki Search/1.0 (https://codepen.io/ashenmg/full/xEwxpE; hosting@ashenmm.ml)';
 
+    /**
+     * Assosiate event handlers
+     */
     $(function() {
 
       // Search Wiki: Search wikipedia for a user specific entry
-      // TODO handle empty submits
-
       $('form').submit(function() {
 
         const query = this.q.value;
@@ -55,9 +56,17 @@
         if (!query)
           return false;
 
-        $.getJSON(
-          `${endpoint}?action=opensearch&format=json&origin=${origin}&search=${query}&namespace=0`,
-          render);
+        // render modal with progress indicator for interaction
+        $('#results').modal('show');
+
+        $.getJSON(endpoint, {
+          action: 'opensearch',
+          format: 'json',
+          origin: origin,
+          search: query,
+          namespace: 0
+        }, render);
+
         return false;
 
       });
@@ -76,6 +85,9 @@
 
     });
 
+    /**
+     * Append data to predefined Modal
+     */
     function render(data) {
 
       // data indexes
@@ -103,14 +115,14 @@
           <input type="search" name="q" class="form-control col-5" placeholder="Search Wikipedia" />
         </div>
         <div class="form-group row justify-content-center">
-          <input type="submit" class="btn btn-default col-2" value="Search Wiki" data-toggle="modal" data-target="#results" />
+          <input type="submit" class="btn btn-default col-2" value="Search Wiki" />
           <input type="button" class="btn btn-default col-2" name="random" value="Random Wiki" />
         </div>
       </form>
 
-      <!-- Model for Search Results -->
+      <!-- Modal for Search Results -->
       <div id="results" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="wiki search results" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content">
             <div class="modal-body">
               <div class="text-center">
