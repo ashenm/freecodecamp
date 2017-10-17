@@ -1,0 +1,156 @@
+<!--
+
+  Build a Personal Portfolio Webpage
+  https://codepen.io/ashenm/full/rrNJAB
+  https://www.freecodecamp.org/challenges/build-a-personal-portfolio-webpage
+
+  Ashen Gunaratne
+  mail@ashenm.ml
+
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta content="Ashen M. Gunaratne is a computer science undergraduate student in the School of Engineering and Applied Sciences of Harvard University" name="description" />
+  <meta content="ashen m. gunaratne harvard undergraduate computer science college extension school" name="keywords" />
+  <meta content="Ashen M. Gunaratne" name="author" />
+  <title>Personal Portfolio</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/2.9.4/jquery.fullpage.min.css" integrity="sha256-r2glH03VUY1R1G+7PwWdfL/NaTKpbInwaZFGiohbo4A=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" integrity="sha256-3iu9jgsy9TpTwXKb7bNQzqWekRX7pPK+2OLj3R922fo=" crossorigin="anonymous" />
+  <style type="text/css">
+
+    body {
+      color: #fff;
+      text-align: center;
+      background-color: #333;
+      text-shadow: 0 .05rem .1rem rgba(0,0,0,.5);
+    }
+
+    a,
+    a:focus,
+    a:hover {
+      color: #fff;
+    }
+
+    i {
+      margin: 25px;
+      line-height: 0;
+      font-size: 75px;
+    }
+
+    #nav-main .nav-link {
+      font-weight: bold;
+      color: rgba(255,255,255,.5);
+      background-color: transparent;
+      border-bottom: .16rem solid transparent;
+    }
+
+    #nav-main .nav-link:hover {
+      border-bottom-color: rgba(255,255,255,.25);
+    }
+
+    #nav-main .nav-link {
+      margin-left: 1rem;
+    }
+
+    #nav-main .active {
+      color: #fff;
+      border-bottom-color: #fff;
+    }
+
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/2.9.4/jquery.fullpage.min.js" integrity="sha256-r80qU2FgO31x7HtK2BQxYOQxPb45x+eKKhzA0OrepyM=" crossorigin="anonymous"></script>
+  <script type="text/javascript">
+
+
+    const username = 'ashenm';
+    const codepen = `http://codepen.io/${username}`;
+    const endpoint = `https://codepen.io/api/oembed?format=js&url=${codepen}`;
+
+    const pens = [
+      'jrOYEB', // freeCodeCamp: Build a Tribute Page
+      'GjJxRO', // freeCodeCamp: Random Quote Machine
+      'kkWpqm', // freeCodeCamp: Show the Local Weather
+      'xEwxpE', // freeCodeCamp: Build a Wikipedia Viewer
+      'YrOgqR' // freeCodeCamp: Use the Twitchtv JSON API
+    ];
+
+    // on DOM ready
+    $(function() {
+
+      $('#fullpage').fullpage({
+        menu: '#nav-main',
+        anchors: ['main', 'about', 'portfolio', 'contact']
+      });
+
+      pens.forEach(pen => {
+        const url = `${endpoint}/pen/${pen}&height=320&callback=?`;
+        $.getJSON(url, pen => $('.card-deck').append(`<div class="card">${pen.html}</div>`));
+      });
+
+    });
+
+  </script>
+</head>
+<body>
+  <header>
+    <nav id="nav-main" class="pt-0 pb-0 navbar fixed-top navbar-dark">
+      <a class="navbar-brand" href="#main">Ashen Gunaratne</a>
+      <ul class="nav nav-pills">
+        <li class="nav-item">
+          <a data-menuanchor="about" class="nav-link" href="#about">about</a>
+        </li>
+        <li class="nav nav-pills">
+          <a data-menuanchor="portfolio" class="nav-link" href="#portfolio">portfolio</a>
+        </li>
+        <li class="nav nav-pills">
+          <a data-menuanchor="contact" class="nav-link" href="#contact">contact</a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <div class="container">
+      <div id="fullpage" >
+
+        <div class="section active">
+          <h1>Ashen Gunaratne</h1>
+          <p class="lead">Ashen Gunaratne is an ndergraduate student in the <a href="https://www.seas.harvard.edu" target="_blank">School of Engineering and Applied Sciences of Harvard University</a></p>
+        </div>
+
+        <div class="section">
+          <h4></h4>
+          <img alt="photo" width="200" height="200" class="m-3 img-fluid rounded-circle" src="https://avatars2.githubusercontent.com/u/16164426?v=4" />
+          <p>Ashen Gunaratne is is a computer science undergraduate student in the <a href="https://www.seas.harvard.edu" target="_blank">School of Engineering and Applied Sciences of Harvard University</a>. He completed his primary education at <a href="https://www.sebsmoratuwa.lk">St. Sebastian's College</a> and secondary education at <a href="https://www.lakeland.edu.lk">Lakeland Inter-American School</a>.</p>
+        </div>
+
+        <div class="section">
+          <h4></h4>
+          <div class="card-deck"></div>
+        </div>
+
+        <div class="section">
+          <h4></h4>
+          <p>
+            <a href="mailto:mail@ashenm.ml"><i class="ion-ios-email-outline"></i></a>
+            <a href="https://www.ashenm.ml" target="_blank"><i class="ion-earth"></i></a>
+            <a href="https://codepen.io/ashenm" target="_blank"><i class="ion-social-codepen-outline"></i></a>
+            <a href="https://github.com/ashenm" target="_blank"><i class="ion-social-github-outline"></i></a>
+            <a href="https://www.instagram.com/_ashenm" target="_blank"><i class="ion-social-instagram-outline"></i></a>
+            <a href="https://www.linkedin.com/in/ashenm" target="_blank"><i class="ion-social-linkedin-outline"></i></a>
+            <a href="https://www.reddit.com/user/_ashenm" target="_blank"><i class="ion-social-reddit-outline"></i></a>
+            <a href="https://www.twitter.com/_ashenm" target="_blank"><i class="ion-social-twitter-outline"></i></a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </main>
+  <footer>
+  </footer>
+</body>
+</html>
