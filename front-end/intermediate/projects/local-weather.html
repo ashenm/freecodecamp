@@ -1,25 +1,31 @@
 <!--
 
   Show the Local Weather
-  https://codepen.io/ashenm/pen/kkWpqm
+  https://codepen.io/ashenm/full/kkWpqm
   https://www.freecodecamp.org/challenges/show-the-local-weather
 
   Ashen Gunaratne
   mail@ashenm.ml
 
-!-->
+-->
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="description" content="Query local weather" />
   <meta name="keywords" content="ashen m. gunaratne freecodecamp projects intermediate" />
   <meta name="author" content="Ashen Gunaratne" />
   <title>Local Weather</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous" />
-  <link rel="stylesheet" type="text/css" href="https://raw.githubusercontent.com/ionic-team/ionicons/gh-pages/css/ionicons.min.css?v=2.0.1" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" integrity="sha256-3iu9jgsy9TpTwXKb7bNQzqWekRX7pPK+2OLj3R922fo=" crossorigin="anonymous" />
   <style type="text/css">
+
+    main {
+      display: flex;
+      min-height: 100vh;
+      align-items: center;
+    }
 
     h1 {
       font-size: 128px;
@@ -30,10 +36,6 @@
       margin: 75px;
       line-height: 0;
       font-size: 300px;
-    }
-
-    .container {
-      margin-top: 22.5vh;
     }
 
     .figure {
@@ -62,8 +64,8 @@
         navigator.geolocation.getCurrentPosition(sucess, error, options);
 
         document.querySelector('figcaption').onclick = function() {
-          const temperature = this.previousElementSibling;
           units = (units === 'C') ? 'F' : 'C';
+          const temperature = this.previousElementSibling;
           temperature.innerText = toggle(Number(temperature.innerText), units);
           this.innerText = String.fromCharCode(176) + units;
         };
@@ -72,7 +74,8 @@
     };
 
     /**
-     * Geo interface sucess handler
+     * Geo interface parameters
+     * sucess handler
      */
     const sucess = function(position) {
 
@@ -94,7 +97,8 @@
     };
 
     /**
-     * Geo interface error handler
+     * Geo interface parameters
+     * error handler
      */
     const error = function(error) {
       if (error.code === 1) {
@@ -107,7 +111,8 @@
     };
 
     /**
-     * Geo interface options
+     * Geo interface parameters
+     * options
      */
     const options = {
       enableHighAccuracy: false
@@ -125,7 +130,8 @@
     };
 
     /**
-     * Return icon class based on weather condition
+     * Return Ionicons icon class based on weather condition
+     * https://github.com/ionic-team/ionicons
      */
     function icon(weather) {
       switch (weather) {
