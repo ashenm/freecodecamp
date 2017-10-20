@@ -1,0 +1,298 @@
+<!--
+
+  Build a JavaScript Calculator
+  https://codepen.io/ashenm/full/______
+  https://www.freecodecamp.org/challenges/build-a-javascript-calculator
+
+  Ashen Gunaratne
+  mail@ashenm.ml
+
+-->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="description" content="A JavaScript Calculator" />
+  <meta name="keywords" content="ashen m. gunaratne freecodecamp projects intermediate" />
+  <meta name="author" content="Ashen Gunaratne" />
+  <title>JavaScript Calculator</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous" />
+  <style type="text/css">
+
+    main {
+      display: flex;
+      min-height: 100vh;
+      align-items: center;
+    }
+
+    #history {
+      min-height: 24px;
+      margin-bottom: 0rem;
+      border-bottom-left-radius: 0rem;
+      border-bottom-right-radius: 0rem;
+    }
+
+    #viewport {
+      font-size: 3.75rem;
+      margin-top: 0rem;
+      min-height: 100px;
+      border-top-left-radius: 0rem;
+      border-top-right-radius: 0rem;
+    }
+
+    #history,
+    #viewport {
+      text-align: right;
+      background-color: #cfcfcf;
+    }
+
+    .col {
+      margin: 0.125rem;
+      border-radius: .25rem;
+    }
+
+    .btn-default {
+      cursor: pointer;
+      background-color: #d0d0d0;
+    }
+
+    .btn-default:hover {
+      background-color: #b0b0b0;
+    }
+
+    .value {
+      background-color: #e0e0e0;
+    }
+
+  </style>
+  <script type="text/javascript">
+
+    let value = 0;
+    let cumulate = 0;
+    let operator = '';
+    let raw_input = '0';
+
+    // number of decimal places
+    const daccuracy = Math.pow(10, 4);
+
+    // number of highest permissible places
+    const ceiling = 7;
+    const sanitiser = new RegExp(`(?:\\d\\.\\d{0,6})|(?:[1-9]\\d\\.\\d{0,5})|(?:[1-9]\\d{2}\\.\\d{0,4})|(?:[1-9]\\d{3}\\.\\d{0,3})|(?:[1-9]\\d{4}\\.\\d{0,2})|(?:[1-9]\\d{5}\\.\\d{0,1})|(?:[1-9]\\d{0,6})|(?:\\d(?!\\d+))`);
+
+    // on DOM ready
+    document.onreadystatechange = function() {
+      if (document.readyState === 'interactive') {
+
+        // references
+        sequence = document.getElementById('history');
+        viewport = document.getElementById('viewport');
+
+        // associate event handlers
+        document.querySelectorAll('.btn-default').forEach(button => {
+          button.onclick = router;
+        });
+
+      }
+    };
+
+    /**
+     * Process input based on its semantic value 
+     */
+    function router(e) {
+      if (this.className.endsWith('value')) {
+        raw_input = sanitiser.exec(raw_input + this.innerText)[0];
+        update(viewport, raw_input);
+      } else {
+        value = Number(viewport.innerText);
+        operate(this.innerText);
+      }
+    }
+
+    /**
+     * Update parameterised section
+     * with parameterised data
+     */
+    function update(section, data) {
+      section.innerText = data;
+    }
+
+    /**
+     * Operation handler
+     */
+    function operate(element) {
+
+      const request = element.charCodeAt();
+      const previous = operator.charCodeAt();
+
+      // on value operators
+      switch (request) {
+        // % (percentage)
+        case 37:
+          return;
+        // √ (squareroot)
+        case 8730:
+          value = daccurate(Math.sqrt(value));
+          update(viewport, value);
+          init(true);
+          return;
+        // 𝓍² (square)
+        case 55349:
+          value = daccurate(Math.pow(value, 2));
+          update(viewport, value);
+          init(true);
+          return;
+        // 1⁄𝓍 (reciprocal)
+        case 49:
+          value = daccurate(Math.pow(value, -1))
+          update(viewport, value);
+          init(true);
+          return;
+        // ⊲ (backspace)
+        case 8882:
+          raw_input = raw_input.slice(0, -1);
+          update(viewport, raw_input);
+          return;
+        // ± (negate)
+        case 177:
+          value *= -1;
+          update(viewport, value);
+          init(true);
+          return;
+        // Clear Entry
+        case 67:
+          init(true);
+          update(viewport, value);
+          return;
+        // Clear All
+        case 65:
+          init(true, true);
+          update(sequence, '');
+          update(viewport, value);
+          return;
+      }
+
+      update(sequence, `${sequence.innerText} ${value} ${element}`);
+
+      // cumulative operators
+      switch(previous) {
+        // ÷ (division)
+        case 247:
+          cumulate = daccurate(cumulate / value);
+          update(viewport, cumulate);
+          init(true);
+          break;
+        // × (multiple)
+        case 215:
+          cumulate = daccurate(cumulate * value);
+          update(viewport, cumulate);
+          init(true);
+          break;
+        // − (subtraction)
+        case 8722:
+          cumulate = daccurate(cumulate - value);
+          update(viewport, cumulate);
+          init(true);
+          break;
+        // + (addition)
+        case 43:
+          cumulate = daccurate(cumulate + value);
+          update(viewport, cumulate);
+          init(true);
+          break;
+        default:
+          cumulate = daccurate(cumulate + value);
+          init(true);
+          break;
+      }
+
+      operator = element;
+
+      switch(request) {
+        // = (equal)
+        case 61:
+          update(sequence, '');
+          update(viewport, cumulate);
+          init(true, true);
+          return;
+      }
+
+    }
+
+    /**
+     * Return the value of a number
+     * rounded to the nearest daccuracy defined
+     */
+    function daccurate(number) {
+      return Math.round(number * daccuracy) / daccuracy;
+    }
+
+    /**
+     * Initialise cumulative sum,
+     * current value, and input string
+     */
+    function init() {
+      if (arguments[0]) {
+        value = 0;
+        raw_input = '0';
+      }
+      if (arguments[1]) {
+        cumulate = 0;
+      }
+    }
+
+  </script>
+</head>
+<body>
+  <main>
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-8 col-md-5 col-lg-3">
+          <div class="row">
+            <div id="history" class="col"></div>
+          </div>
+          <div class="row">
+            <div id="viewport" class="col">0</div>
+          </div>
+          <div class="row">
+            <div class="col btn btn-default">&percnt;</div>
+            <div class="col btn btn-default">&radic;</div>
+            <div class="col btn btn-default">&xscr;&sup2;</div>
+            <div class="col btn btn-default">1&frasl;&xscr;</div>
+          </div>
+          <div class="row">
+            <div class="col btn btn-default">CE</div>
+            <div class="col btn btn-default">AC</div>
+            <div class="col btn btn-default">&vltri;</div>
+            <div class="col btn btn-default">&divide;</div>
+          </div>
+          <div class="row">
+            <div class="col btn btn-default value">7</div>
+            <div class="col btn btn-default value">8</div>
+            <div class="col btn btn-default value">9</div>
+            <div class="col btn btn-default">&times;</div>
+          </div>
+          <div class="row">
+            <div class="col btn btn-default value">4</div>
+            <div class="col btn btn-default value">5</div>
+            <div class="col btn btn-default value">6</div>
+            <div class="col btn btn-default">&minus;</div>
+          </div>
+          <div class="row">
+            <div class="col btn btn-default value">1</div>
+            <div class="col btn btn-default value">2</div>
+            <div class="col btn btn-default value">3</div>
+            <div class="col btn btn-default">&plus;</div>
+          </div>
+          <div class="row">
+            <div class="col btn btn-default">&plusmn;</div>
+            <div class="col btn btn-default value">0</div>
+            <div class="col btn btn-default value">&period;</div>
+            <div class="col btn btn-default">&equals;</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
