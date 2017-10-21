@@ -1,7 +1,7 @@
 <!--
 
   Build a JavaScript Calculator
-  https://codepen.io/ashenm/full/______
+  https://codepen.io/ashenm/full/OxqeLm
   https://www.freecodecamp.org/challenges/build-a-javascript-calculator
 
   Ashen Gunaratne
@@ -14,7 +14,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <meta name="description" content="A JavaScript Calculator" />
-  <meta name="keywords" content="ashen m. gunaratne freecodecamp projects intermediate" />
+  <meta name="keywords" content="ashen m. gunaratne freecodecamp projects advanced" />
   <meta name="author" content="Ashen Gunaratne" />
   <title>JavaScript Calculator</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous" />
@@ -78,6 +78,8 @@
 
     // number of highest permissible places
     const ceiling = 7;
+
+    // TODO: abstract regex to parametrise character limit
     const sanitiser = new RegExp(`(?:\\d\\.\\d{0,6})|(?:[1-9]\\d\\.\\d{0,5})|(?:[1-9]\\d{2}\\.\\d{0,4})|(?:[1-9]\\d{3}\\.\\d{0,3})|(?:[1-9]\\d{4}\\.\\d{0,2})|(?:[1-9]\\d{5}\\.\\d{0,1})|(?:[1-9]\\d{0,6})|(?:\\d(?!\\d+))`);
 
     // on DOM ready
@@ -129,6 +131,7 @@
       switch (request) {
         // % (percentage)
         case 37:
+          // TODO
           return;
         // √ (squareroot)
         case 8730:
