@@ -79,6 +79,9 @@
     // number of highest permissible places
     const ceiling = 7;
 
+    // node references
+    const node = {};
+
     // TODO: abstract regex to parametrise character limit
     const sanitiser = new RegExp(`(?:\\d\\.\\d{0,6})|(?:[1-9]\\d\\.\\d{0,5})|(?:[1-9]\\d{2}\\.\\d{0,4})|(?:[1-9]\\d{3}\\.\\d{0,3})|(?:[1-9]\\d{4}\\.\\d{0,2})|(?:[1-9]\\d{5}\\.\\d{0,1})|(?:[1-9]\\d{0,6})|(?:\\d(?!\\d+))`);
 
@@ -86,9 +89,9 @@
     document.onreadystatechange = function() {
       if (document.readyState === 'interactive') {
 
-        // references
-        sequence = document.getElementById('history');
-        viewport = document.getElementById('viewport');
+        // associate DOM node references
+        node.sequence = document.getElementById('history');
+        node.viewport = document.getElementById('viewport');
 
         // associate event handlers
         document.querySelectorAll('.btn-default').forEach(button => {
@@ -104,9 +107,9 @@
     function router(e) {
       if (this.className.endsWith('value')) {
         raw_input = sanitiser.exec(raw_input + this.innerText)[0];
-        update(viewport, raw_input);
+        update(node.viewport, raw_input);
       } else {
-        value = Number(viewport.innerText);
+        value = Number(node.viewport.innerText);
         operate(this.innerText);
       }
     }
@@ -136,71 +139,71 @@
         // √ (squareroot)
         case 8730:
           value = daccurate(Math.sqrt(value));
-          update(viewport, value);
+          update(node.viewport, value);
           init(true);
           return;
         // 𝓍² (square)
         case 55349:
           value = daccurate(Math.pow(value, 2));
-          update(viewport, value);
+          update(node.viewport, value);
           init(true);
           return;
         // 1⁄𝓍 (reciprocal)
         case 49:
           value = daccurate(Math.pow(value, -1))
-          update(viewport, value);
+          update(node.viewport, value);
           init(true);
           return;
         // ⊲ (backspace)
         case 8882:
           raw_input = raw_input.slice(0, -1);
-          update(viewport, raw_input);
+          update(node.viewport, raw_input);
           return;
         // ± (negate)
         case 177:
           value *= -1;
-          update(viewport, value);
+          update(node.viewport, value);
           init(true);
           return;
         // Clear Entry
         case 67:
           init(true);
-          update(viewport, value);
+          update(node.viewport, value);
           return;
         // Clear All
         case 65:
           init(true, true);
-          update(sequence, '');
-          update(viewport, value);
+          update(node.sequence, '');
+          update(node.viewport, value);
           return;
       }
 
-      update(sequence, `${sequence.innerText} ${value} ${element}`);
+      update(node.sequence, `${node.sequence.innerText} ${value} ${element}`);
 
       // cumulative operators
       switch(previous) {
         // ÷ (division)
         case 247:
           cumulate = daccurate(cumulate / value);
-          update(viewport, cumulate);
+          update(node.viewport, cumulate);
           init(true);
           break;
         // × (multiple)
         case 215:
           cumulate = daccurate(cumulate * value);
-          update(viewport, cumulate);
+          update(node.viewport, cumulate);
           init(true);
           break;
         // − (subtraction)
         case 8722:
           cumulate = daccurate(cumulate - value);
-          update(viewport, cumulate);
+          update(node.viewport, cumulate);
           init(true);
           break;
         // + (addition)
         case 43:
           cumulate = daccurate(cumulate + value);
-          update(viewport, cumulate);
+          update(node.viewport, cumulate);
           init(true);
           break;
         default:
@@ -214,8 +217,8 @@
       switch(request) {
         // = (equal)
         case 61:
-          update(sequence, '');
-          update(viewport, cumulate);
+          update(node.sequence, '');
+          update(node.viewport, cumulate);
           init(true, true);
           return;
       }
