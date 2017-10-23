@@ -1,0 +1,300 @@
+<!--
+
+  Build a Pomodoro Clock
+  https://codepen.io/ashenm/full/_
+  https://www.freecodecamp.org/challenges/build-a-pomodoro-clock
+
+  Ashen Gunaratne
+  mail@ashenm.ml
+
+-->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="description" content="A JavaScript Calculator" />
+  <meta name="keywords" content="ashen m. gunaratne freecodecamp projects advanced" />
+  <meta name="author" content="Ashen Gunaratne" />
+  <title>Pomodoro Clock</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" integrity="sha256-3iu9jgsy9TpTwXKb7bNQzqWekRX7pPK+2OLj3R922fo=" crossorigin="anonymous" />
+  <style type="text/css">
+
+    body {
+      background-color: #1b1b1b;
+    }
+
+    main {
+      display: flex;
+      width: min-content;
+      min-height: 100vh;
+      margin-left: auto;
+      margin-right: auto;
+      align-items: center;
+    }
+
+    circle {
+      cursor: pointer;
+      stroke: #00b33c;
+      stroke-width: 1px;
+      fill: rgba(0,0,0,0.175);
+    }
+
+    text {
+      fill: #fff;
+      font-size: 50px;
+      text-anchor: middle;
+      alignment-baseline: central;
+      font-family: "Courier New";
+    }
+
+    #countdown {
+      display: none;
+      cursor: pointer;
+      font-size: 225px;
+    }
+
+    #status {
+      fill: #00b33c;
+    }
+
+    #minutes {
+      font-size: 11rem;
+    }
+
+    #seconds {
+      font-size: 6rem;
+    }
+
+    #reset {
+      display: none;
+      font-family: Ionicons;
+    }
+
+    .tuner {
+      cursor: pointer;
+    }
+
+    .caption {
+      font-size: 22.5px;
+    }
+
+    .display-1 {
+      font-size: 10rem;
+    }
+
+  </style>
+  <script type="text/javascript">
+
+    // node references
+    const node = {};
+
+    // initial pomodoros
+    // for initialisation
+    const init = {
+      _limit: 60,
+      _state: false,
+      respite: 5,
+      interval: 25
+    }
+
+    // runtime pomodoros
+    const pomodoros = {
+      init() {
+        this.state = init._state;
+        this.respite = init.respite;
+        this.interval = init.interval;
+        this.seconds = 0;
+      }
+    };
+
+    // interval identifiers
+    let intervalID = null,
+      intervalMode = null;
+
+    // on DOM ready
+    document.onreadystatechange = function() {
+      if (document.readyState === 'interactive') {
+
+        // initial node references
+        // for event listener association
+        node.timer = document.querySelector('circle');
+        node.reset = document.getElementById('reset');
+        node.countdown = document.getElementById('countdown');
+
+        // associate event handlers
+        node.timer.onclick = toggle;
+        node.reset.onclick = reset;
+        node.countdown.onclick = toggle;
+        document.querySelectorAll('.tuner')
+          .forEach(tuner => tuner.onclick = tune);
+
+        // additional node references for DOM manupilation
+        node.rect = document.querySelector('rect');
+        node.bell = document.querySelector('audio');
+        node.group = document.querySelector('g');
+        node.status = document.getElementById('status');
+        node.seconds = document.getElementById('seconds');
+        node.minutes = document.getElementById('minutes');
+        node.respite = document.getElementById('respite');
+        node.interval = document.getElementById('interval');
+
+      }
+    };
+
+    /**
+     * Change pomodoros on user request
+     */
+    function tune(e) {
+      const operator = this.textContent;
+      const reference = this.attributes.rel.value;
+      switch (operator) {
+        case '+':
+          init[reference] = wrap(init[reference] + 1);
+          node[reference].textContent = init[reference];
+          break;
+        case '-':
+          init[reference] = wrap(init[reference] - 1);
+          node[reference].textContent = init[reference];
+          break;
+      }
+    }
+
+    /**
+     * Carry over an given number
+     * to satisfy limit of 1 and `init._limit`
+     */
+    function wrap(number) {
+      return (number < 1) ? init._limit : number % init._limit;
+    }
+
+    /**
+     * Toggle between timer start, pause, and resume
+     */
+    function toggle(e) {
+      if (pomodoros.state) {
+        node.reset.style.display = 'block';
+        clearInterval(intervalID);
+      } else if (intervalMode) {
+        node.reset.style.display = 'none';
+        timer(intervalMode);
+      } else {
+        initialise();
+        timer('interval');
+      }
+      pomodoros.state = !pomodoros.state;
+    }
+
+    /**
+     * Initialise and pre-render timer
+     */
+    function initialise() {
+      pomodoros.init();
+      node.group.style.display = 'none';
+      node.reset.style.display = 'none';
+      node.minutes.textContent = pomodoros.interval;
+      node.seconds.textContent = pomodoros.seconds;
+      node.countdown.style.display = 'block';
+    }
+
+    /**
+     * Reset pomodoros and render initial state
+     */
+    function reset(e) {
+      pomodoros.init();
+      intervalMode = null;
+      node.respite.textContent = pomodoros.respite;
+      node.interval.textContent = pomodoros.interval;
+      node.rect.attributes.height.value = '0%';
+      node.countdown.style.display = 'none';
+      node.status.style.stroke = '#00b33c';
+      node.timer.style.stroke = '#00b33c';
+      node.status.style.fill = '#00b33c';
+      node.group.style.display = 'block';
+      e.stopPropagation();
+    };
+
+    /**
+     * Render timer progress
+     */
+    function progress() {
+      const start = 100 / init[intervalMode] *
+        (pomodoros[intervalMode] + pomodoros.seconds / 60);
+      node.rect.attributes.y.value = `${start}%`;
+      node.rect.attributes.height.value = `${Math.abs(100 - start)}%`;
+    };
+
+    /**
+     * Initialise parameterised timer
+     */
+    function timer(mode) {
+      intervalMode = mode;
+      intervalID = window.setInterval(function() {
+        const next = pomodoros.seconds - 1;
+        if (next > 0) {
+          pomodoros.seconds = next;
+          node.seconds.textContent = pomodoros.seconds;
+        } else if (pomodoros[mode]) {
+          pomodoros[mode] -= 1;
+          pomodoros.seconds = 59;
+          node.seconds.textContent = pomodoros.seconds;
+          node.minutes.textContent = pomodoros[mode];
+        } else {
+          node.bell.play();
+          clearInterval(intervalID);
+          pomodoros[intervalMode] = init[intervalMode];
+          node.seconds.textContent = next;
+          (intervalMode === 'interval') ?
+            (node.timer.style.stroke = '#e63900',
+            node.status.style.stroke = '#e63900',
+            node.status.style.fill = '#e63900', timer('respite')) :
+            (node.timer.style.stroke = '#00b33c',
+            node.status.style.stroke = '#00b33c',
+            node.status.style.fill = '#00b33c', timer('interval'));
+        }
+        progress();
+      }, 1000);
+    }
+
+  </script>
+
+</head>
+<body>
+  <main>
+    <svg height="350" width="350">
+      <circle cx="50%" cy="50%" r="50%" />
+      <g>
+        <text x="50%" y="35%">
+          <tspan rel="interval" class="tuner">+</tspan>
+          <tspan id="interval">25</tspan>
+          <tspan rel="interval" class="tuner">-</tspan>
+        </text>
+        <text x="50%" y="45%" class="caption">interval</text>
+        <text x="50%" y="67%">
+          <tspan rel="respite" class="tuner">+</tspan>
+          <tspan id="respite">5</tspan>
+          <tspan rel="respite" class="tuner">-</tspan>
+        </text>
+        <text x="50%" y="77%" class="caption">break</text>
+      </g>
+      <g id="countdown">
+        <defs>
+          <clipPath id="progress">
+            <rect x="0%" y="100%" width="100%" height="0%" />
+          </clipPath>
+        </defs>
+        <circle id="status" cx="50%" cy="50%" r="49%" clip-path="url(#progress)" />
+        <text id="minutes" x="50%" y="40%"></text>
+        <text id="seconds" x="50%" y="70%"></text>
+        <text id="reset" x="50%" y="90%">&#xf49a;</text>
+      </g>
+    </svg>
+    <audio preload="auto">
+      <!-- http://soundbible.com/1251-Beep.html -->
+      <source src="http://soundbible.com/grab.php?id=1251&type=mp3" type="audio/mpeg" />
+      <source src="http://soundbible.com/grab.php?id=1251&type=wav" type="audio/wav" />
+    </audio>
+  </main>
+</body>
+</html>
