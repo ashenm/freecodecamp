@@ -35,12 +35,6 @@
       color: #fff;
     }
 
-    i {
-      margin: 25px;
-      line-height: 0;
-      font-size: 75px;
-    }
-
     #nav-main .nav-link {
       font-weight: bold;
       color: rgba(255,255,255,.5);
@@ -61,37 +55,97 @@
       border-bottom-color: #fff;
     }
 
+    .card {
+      height: 324px;
+      cursor: pointer;
+      border: 1px #fff solid;
+      background: radial-gradient(ellipse farthest-corner at center center, rgba(0,0,0,0.25) 20%, rgba(0,0,0,0.65) 100%) repeat scroll 0% 0%;
+    }
+
+    .card-body {
+      padding: 1rem;
+    }
+
+    .card-title,
+    .card-subtitle {
+      color: #fff;
+      text-align: left;
+      font-family: "Lato", "Lucida Grande", "Lucida Sans Unicode", Tahoma, Sans-Serif;
+    }
+
+    .card-title {
+      font-weight: bold;
+    }
+
+    .card-subtitle {
+      color: #999;
+      font-weight: 400;
+    }
+
+    .contact {
+      margin: 25px;
+      line-height: 0;
+      font-size: 75px;
+    }
+
+    .card a {
+      height: 100%;
+      text-decoration: none;
+    }
+
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/2.9.4/jquery.fullpage.min.js" integrity="sha256-r80qU2FgO31x7HtK2BQxYOQxPb45x+eKKhzA0OrepyM=" crossorigin="anonymous"></script>
   <script type="text/javascript">
 
-    const username = 'ashenm';
-    const codepen = `http://codepen.io/${username}`;
-    const endpoint = `https://codepen.io/api/oembed?format=js&url=${codepen}`;
+    const git = {
+      username: 'ashenm',
+      repository: 'freecodecamp',
+      branch: 'master',
+      endpoint: 'https://cdn.rawgit.com/'
+    };
 
-    const pens = [
-      'jrOYEB', // freeCodeCamp: Build a Tribute Page
-      'GjJxRO', // freeCodeCamp: Random Quote Machine
-      'kkWpqm', // freeCodeCamp: Show the Local Weather
-      'xEwxpE', // freeCodeCamp: Build a Wikipedia Viewer
-      //'YrOgqR', // freeCodeCamp: Use the Twitchtv JSON API
-      'OxqeLm', // freeCodeCamp: Build a JavaScript Calculator
-      'GMaZzg'  // freeCodeCamp: Build a Pomodoro Clock
-    ];
+    const projects = {
+      '/front-end/advanced/projects/pomodoro-clock.html':
+        ['Pomodoro Clock', 'freeCodeCamp: Build a Pomodoro Clock'],
+      '/front-end/advanced/projects/javascript-calculator.html':
+        ['JavaScript Calculator', 'freeCodeCamp: Build a JavaScript Calculator'],
+      '/front-end/intermediate/projects/wikipedia-viewer.html':
+        ['Wikipedia Viewer', 'freeCodeCamp: Build a Wikipedia Viewer'],
+      '/front-end/intermediate/projects/local-weather.html':
+        ['Local Weather', 'freeCodeCamp: Show the Local Weather'],
+      '/front-end/intermediate/projects/random-quote-machine.html':
+        ['Random Quote Machine', 'freeCodeCamp: Build a Random Quote Machine'],
+      '/front-end/basic/projects/tribute-page.html':
+        ['Tribute Page', 'freeCodeCamp: Build a Tribute Page']
+    };
 
     // on DOM ready
     $(function() {
+
+      // node references
+      const portfolio = $('.card-deck');
 
       $('#fullpage').fullpage({
         menu: '#nav-main',
         anchors: ['main', 'about', 'portfolio', 'contact']
       });
 
-      pens.forEach(pen => {
-        const url = `${endpoint}/pen/${pen}&height=320&callback=?`;
-        $.getJSON(url, pen => $('.card-deck').append(`<div class="card">${pen.html}</div>`));
-      });
+      // build portfolio
+      for (project in projects) {
+
+        const node = $(`<div class="card"></div>`);
+        const body = $(`<div class="card-body"></div>`);
+        const link = $(`<a href="${git.endpoint}${git.username}/${git.repository}/${git.branch}${project}" target="_blank" rel="external"></a>`);
+
+        body.append(`<h4 class="card-title">${projects[project][0]}</h4>`);
+        body.append(`<h6 class="card-subtitle mb-2">${projects[project][1]}</h6>`);
+
+        link.append(body);
+        node.append(link);
+        portfolio.append(node);
+
+      }
 
     });
 
@@ -137,15 +191,15 @@
         <div class="section">
           <h4></h4>
           <p>
-            <a href="mailto:mail@ashenm.ml"><i class="ion-ios-email-outline"></i></a>
-            <a href="https://www.ashenm.ml" target="_blank"><i class="ion-earth"></i></a>
-            <a href="https://codepen.io/ashenm" target="_blank"><i class="ion-social-codepen-outline"></i></a>
-            <a href="https://github.com/ashenm" target="_blank"><i class="ion-social-github-outline"></i></a>
-            <a href="https://www.instagram.com/_ashenm" target="_blank"><i class="ion-social-instagram-outline"></i></a>
-            <a href="https://www.linkedin.com/in/ashenm" target="_blank"><i class="ion-social-linkedin-outline"></i></a>
-            <a href="https://www.reddit.com/user/_ashenm" target="_blank"><i class="ion-social-reddit-outline"></i></a>
-            <a href="https://www.twitter.com/_ashenm" target="_blank"><i class="ion-social-twitter-outline"></i></a>
-            <a href="https://plus.google.com/u/0/102805278145349967250" target="_blank"><i class="ion-social-googleplus-outline"></i></a>
+            <a href="mailto:mail@ashenm.ml"><i class="ion-ios-email-outline contact"></i></a>
+            <a href="https://www.ashenm.ml" target="_blank"><i class="ion-earth contact"></i></a>
+            <a href="https://codepen.io/ashenm" target="_blank"><i class="ion-social-codepen-outline contact"></i></a>
+            <a href="https://github.com/ashenm" target="_blank"><i class="ion-social-github-outline contact"></i></a>
+            <a href="https://www.instagram.com/_ashenm" target="_blank"><i class="ion-social-instagram-outline contact"></i></a>
+            <a href="https://www.linkedin.com/in/ashenm" target="_blank"><i class="ion-social-linkedin-outline contact"></i></a>
+            <a href="https://www.reddit.com/user/_ashenm" target="_blank"><i class="ion-social-reddit-outline contact"></i></a>
+            <a href="https://www.twitter.com/_ashenm" target="_blank"><i class="ion-social-twitter-outline contact"></i></a>
+            <a href="https://plus.google.com/u/0/102805278145349967250" target="_blank"><i class="ion-social-googleplus-outline contact"></i></a>
           </p>
         </div>
 
