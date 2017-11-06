@@ -12,7 +12,7 @@ const path = require('path');
 
 module.exports = function(folder, ext, callback) {
 
-  const list = [];
+  let sanitised;
   const extension = `.${ext}`;
 
   fs.readdir(folder, 'utf8', (err, files) => {
@@ -20,13 +20,10 @@ module.exports = function(folder, ext, callback) {
     if (err)
       return callback(err);
 
-    files.forEach(file => {
-      if (path.extname(file) === extension) {
-        list.push(file);
-      }
-    });
+    sanitised = files.filter(
+      file => path.extname(file) === extension);
 
-    callback(null, list);
+    callback(null, sanitised);
 
   });
 

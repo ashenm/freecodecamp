@@ -11,5 +11,5 @@ const fs = require('fs');
 const file = process.argv[2];
 
 console.log(fs.readFileSync(file)
-        .toString().split('\n').length - 1);
+  .toString().split('\n').length - 1);
 

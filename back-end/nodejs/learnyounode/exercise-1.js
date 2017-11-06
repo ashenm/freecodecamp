@@ -9,8 +9,5 @@
 
 const argv = process.argv.slice(2);
 
-let sum = 0;
-argv.forEach(element => sum += Number(element));
-
-console.log(sum);
-
+console.log(argv.reduce((accumulate, element) =>
+            accumulate += Number(element), 0));
