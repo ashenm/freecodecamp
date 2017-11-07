@@ -12,7 +12,7 @@ const port = process.argv[2];
 const app = express();
 
 app.get('/search', (request, response) => {
-  response.end(JSON.stringify(request.query));
+  response.json(request.query);
 });
 
 app.listen(port);
