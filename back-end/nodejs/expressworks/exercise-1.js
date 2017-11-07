@@ -8,10 +8,10 @@
  */
 
 const express = require('express');
-const index = process.argv[3];
+const folder = process.argv[3];
 const port = process.argv[2];
 const app = express();
 
-app.use(express.static(index));
+app.use(express.static(folder));
 
 app.listen(port);
