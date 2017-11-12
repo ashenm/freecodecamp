@@ -47,19 +47,20 @@ function checkCashRegister(price, cash, cid) {
   }
 
   Object.keys(map).forEach(key => {
+
     const counter = drawer[key];
     const reduction = Math.floor(balance / map[key]) * map[key];
-    if (reduction !== 0) {
-      if (reduction < counter) {
-        change.push([key, reduction]);
-        balance = Math.round((balance - reduction) * 100) / 100;
-      } else {
-        change.push([key, counter]);
-        balance = Math.round((balance - counter) * 100) / 100;
-      }
+
+    if (counter > reduction) {
+      change.push([key, reduction]);
+      balance = Math.round((balance - reduction) * 100) / 100;
+    } else if (reduction > 0) {
+      change.push([key, counter]);
+      balance = Math.round((balance - counter) * 100) / 100;
     }
+
   });
 
-  return (balance === 0) ? change : 'Insufficient Funds"';
+  return (balance === 0) ? change : 'Insufficient Funds';
 
 }
