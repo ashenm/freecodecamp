@@ -30,6 +30,7 @@ function checkCashRegister(price, cash, cid) {
     'PENNY'       : 0.01
   }
 
+  // balance due
   let balance = cash - price;
 
   // initialise cid as an object
@@ -51,12 +52,12 @@ function checkCashRegister(price, cash, cid) {
     const counter = drawer[key];
     const reduction = Math.floor(balance / map[key]) * map[key];
 
-    if (counter > reduction) {
-      change.push([key, reduction]);
-      balance = Math.round((balance - reduction) * 100) / 100;
-    } else if (reduction > 0) {
+    if (reduction >= counter) {
       change.push([key, counter]);
       balance = Math.round((balance - counter) * 100) / 100;
+    } else if (reduction > 0) {
+      change.push([key, reduction]);
+      balance = Math.round((balance - reduction) * 100) / 100;
     }
 
   });
