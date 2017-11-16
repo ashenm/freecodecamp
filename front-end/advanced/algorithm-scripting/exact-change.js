@@ -49,12 +49,11 @@ function checkCashRegister(price, cash, cid) {
 
   Object.keys(map).forEach(key => {
 
-    const counter = drawer[key];
     const reduction = Math.floor(balance / map[key]) * map[key];
 
-    if (reduction >= counter) {
-      change.push([key, counter]);
-      balance = Math.round((balance - counter) * 100) / 100;
+    if (reduction >= drawer[key]) {
+      change.push([key, drawer[key]]);
+      balance = Math.round((balance - drawer[key]) * 100) / 100;
     } else if (reduction > 0) {
       change.push([key, reduction]);
       balance = Math.round((balance - reduction) * 100) / 100;
