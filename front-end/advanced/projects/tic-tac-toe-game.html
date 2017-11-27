@@ -1,0 +1,421 @@
+<!--
+
+  Build a Tic Tac Toe Game
+  https://codepen.io/ashenm/full/
+  https://www.freecodecamp.org/challenges/build-a-tic-tac-toe-game
+
+  Ashen Gunaratne
+  mail@ashenm.ml
+
+-->
+<!DOCTYPE html>
+<html>
+<head>  
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="description" content="A Tic Tac Toe Game" />
+  <meta name="keywords" content="ashen m. gunaratne freecodecamp projects advanced" />
+  <meta name="author" content="Ashen Gunaratne" />
+  <title>Tic Tac Toe</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" integrity="sha256-rDWX6XrmRttWyVBePhmrpHnnZ1EPmM6WQRQl6h0h7J8=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" integrity="sha256-3iu9jgsy9TpTwXKb7bNQzqWekRX7pPK+2OLj3R922fo=" crossorigin="anonymous" />
+  <style type="text/css">
+
+    main {
+      display: flex;
+      min-height: 100vh;
+      align-items: center;
+      background-color: #1b1b1b;
+    }
+
+    table {
+      display: none;
+      margin-top: 49px;
+    }
+
+    caption {
+      text-align: center;
+      margin-top: 16px;
+      caption-side: bottom;
+    }
+
+    i {
+      color: #bbb;
+      cursor: pointer;
+      font-size: 36px;
+      line-height: 1.25;
+    }
+
+    .container {
+      width: auto;
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .col {
+      color: #fff;
+      width: 144px;
+      height: 144px;
+      padding: 15px;
+      font-size: 81px;
+    }
+
+    .top {
+      border-bottom: 1px #fff solid;
+    }
+
+    .mid {
+      border-left: 1px #fff solid;
+      border-right: 1px #fff solid;
+    }
+
+    .end {
+      border-top: 1px #fff solid;
+    }
+
+    .triumph {
+      color: #13b9a8;
+    }
+
+    .toggle,
+    .toggle-on,
+    .toggle-off,
+    .toggle-handle {
+      border-radius: 12.5px;
+    }
+
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-toggle/2.2.2/js/bootstrap2-toggle.min.js" integrity="sha256-7prkgOo7MWVE63wWCRyE9iNEsU30NrrUqa3ELTpAyOw=" crossorigin="anonymous"></script>
+  <script type="text/javascript">
+
+    const init = {
+      size: 9,
+      node: 'tbody',
+      toggle: 'input'
+    }
+
+    class Game {
+
+      constructor(size, level, node, toggle) {
+        this.ui = node;
+        this.level = level;
+        this.toggle = toggle;
+        this.state = new State();
+        this.aiplayer = (level !== 'multiplayer') ? new AI() : null;
+      }
+
+      insert(mark, index) {
+        this.board[index] = mark;
+        this.ui[index].text(mark);
+      }
+
+      transition(state) {
+
+        this.state = state;
+
+        if (this.state.terminal()) {
+          this.status = 'end';
+          if (this.state.state === 'X') {
+            // X win
+            return
+          } else if (this.state.state === 'O') {
+            // O win
+            return
+          } else {
+            // draw
+            return
+          }
+        }
+
+        this.toggle.bootstrapToggle('toggle');
+
+        if (this.aiplayer) {
+          this.ai.actuate();
+        }
+
+      }
+
+      start() {
+        this.transition(this.state);
+        this.status = 'progress';
+      }
+
+    }
+
+    class State {
+
+      constructor(previous) {
+        if (!previous) {
+          this.moves = 0;
+          this.state = 'start';
+          this.player = 'X';
+          this.board = new Array(size).fill(null);
+        } else {
+          this.moves = previous.moves;
+          this.state = previous.state;
+          this.player = previous.player;
+          this.board = previous.board.slice();
+        }
+      }
+
+      next() {
+        this.player = this.player === 'X' ? 'O' : 'X';
+      }
+
+      empty() {
+        return this.board.reduce((accumulator, block, index) =>
+          block === null ? accumulator.concat(index) : accumulator, []);
+      }
+
+      terminal() {
+
+        // TODO implement verticle, horizontal, and diagnol checks
+
+        // draw
+        if (!this.empty().length) {
+          this.state = 'draw';
+          return true;
+        }
+
+        return false;
+
+      }
+
+    }
+
+    // abstracted from https://mostafa-samir.github.io/Tic-Tac-Toe-AI/
+    class AI {
+
+      constructor(game, level) {
+        this.game = game;
+        this.intelligence = level;
+      }
+
+      minimax(state) {
+
+      }
+
+      blind(turn) {
+
+      }
+
+      novice(turn) {
+
+      }
+
+      master(turn) {
+
+      }
+
+      actuate(turn) {
+        switch (this.intelligence) {
+          case 'easy':
+            blind(turn);
+            break;
+          case 'medium':
+            novice(turn);
+            break;
+          case 'impossible':
+            master(turn);
+            break;
+        }
+      }
+
+    }
+
+    class AIAction {
+
+      constructor(position, state) {
+        this.minimax = 0;
+        this.state = state;
+        this.move = position;
+      }
+
+      transition() {
+        const next = new State(this.state);
+        next.board[this.move] = this.state.player;
+        next.next();
+        return next;
+      }
+
+      static ascending(first, second) {
+        if (first.minimax < second.minimax) {
+          return -1;
+        } else if (first.minimax > second.minimax) {
+          return 1;
+        } else {
+          return 0;
+        }
+      }
+
+      static descending(first, second) {
+        if (first.minimax < second.minimax) {
+          return 1;
+        } else if (first.minimax > second.minimax) {
+          return -1;
+        } else {
+          return 0;
+        }
+      }
+
+    }
+
+    // =====================================
+
+    // on DOM ready
+    $(function() {
+
+      // initialise switch toggle
+      $('input').bootstrapToggle({
+        on: 'X',
+        off: 'O',
+        onstyle: 'default',
+        offstyle: 'default'
+      });
+
+      // event listerns
+      $('form').submit(initialise);
+      $('input').change(toggle);
+      $('.col').click(move);
+      $('.reset').click(reset);
+
+    });
+
+    /**
+     * Call `victory` if current player has two marks either
+     * horizontally, vertically, or diagonally from current position
+     */
+    function check(x, y) {
+
+      // verticle
+      if (board[step(y, 1)][x] === game.player &&
+          board[step(y, 2)][x] === game.player)
+        victory([x, x, x], [y, step(y, 1), step(y, 2)]);
+
+      // horizontal
+      if (board[y][step(x, 1)] === game.player &&
+          board[y][step(x, 2)] === game.player)
+        victory([x, step(x, 1), step(x, 2)], [y, y, y]);
+
+      // left diagonal
+      if (board[step(y, 1)][step(x, 1)] === game.player &&
+          board[step(y, 2)][step(x, 2)] === game.player && x === y)
+        victory([x, step(x, 1), step(x, 2)], [y, step(y, 1), step(y, 2)]);
+
+      // right diagonal
+      if (board[step(y, 2)][step(x, 1)] === game.player &&
+          board[step(y, 1)][step(x, 2)] === game.player && x + y === 2)
+        victory([x, step(x, 1), step(x, 2)], [y, step(y, 2), step(y, 1)]);
+
+      return;
+
+    }
+
+    /**
+     * Step `a` steps from position `n`
+     * while wrapping back to satisfy `limit`
+     */
+    function step(n, a) {
+      return (n + a) % limit;
+    }
+
+    /**
+     * Render winning marks
+     */
+    function victory(coordsX, coordsY) {
+      for (let index = 0; index < limit; index++) {
+        $(`[x="${coordsX[index]}"][y="${coordsY[index]}"]`).addClass('triumph');
+      }
+    }
+
+    /**
+     * Initalise game
+     */
+    function initialise(e) {
+
+      const $this = $(this);
+      const game = new Game(init.size, this.level.value, $(init.node), $(init.toggle));
+
+      $this.css('display', 'none');
+      $this.next().css('display', 'block');
+
+      return false;
+
+    }
+
+    /**
+     * Populate and render game board and initiate `check()`
+     */
+    function move(e) {
+
+      // coordinates
+      const x = Number(this.attributes.x.value);
+      const y = Number(this.attributes.y.value);
+
+      // if already not populated
+      if (!board[y][x]) {
+        $(this).text(game.player);
+        board[y][x] = game.player;
+        check(x, y);
+      }
+
+    }
+
+    /**
+     * Reset to current game to initial state
+     */
+    function reset(e) {
+      $('.col').text('');
+      $('.col').removeClass('triumph');
+      board.forEach(row => row.fill(''));
+    }
+
+  </script>
+</head>
+<body>
+  <main>
+    <div class="container">
+      <form>
+        <div class="form-group">
+          <select id="level" class="form-control" autofocus="autofocus">
+            <option value="easy">Easy</option>
+            <option value="medium" selected="selected">Medium</option>
+            <option value="impossible">Impossible</option>
+            <option value="multiplayer">Play against a friend</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-default">Play</button>
+      </form>
+      <table>
+        <caption>
+          <input type="checkbox" checked="checked" />
+          <div>
+            <i class="ion-ios-refresh-empty reset"></i>
+            <i class="sr-only">reset</i>
+          </div>
+        </caption>
+        <tbody class="table">
+          <tr>
+            <td class="col top" data-index="0"></td>
+            <td class="col top mid" data-index="1"></td>
+            <td class="col top" data-index="2"></td>
+          </tr>
+          <tr>
+            <td class="col" data-index="3"></td>
+            <td class="col mid" data-index="4"></td>
+            <td class="col" data-index="5"></td>
+          </tr>
+          <tr>
+            <td class="col end" data-index="6"></td>
+            <td class="col mid end" data-index="7"></td>
+            <td class="col end" data-index="8"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</body>
+</html>

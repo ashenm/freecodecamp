@@ -1,0 +1,341 @@
+<!--
+
+  Build a Simon Game
+  https://codepen.io/ashenm/full/
+  https://www.freecodecamp.org/challenges/build-a-simon-game
+
+  Ashen Gunaratne
+  mail@ashenm.ml
+
+-->
+<!DOCTYPE html>
+<html>
+<head> 
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="description" content="A Simon Game" />
+  <meta name="keywords" content="ashen m. gunaratne freecodecamp projects advanced" />
+  <meta name="author" content="Ashen Gunaratne" />
+  <title>Simon</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" integrity="sha256-3iu9jgsy9TpTwXKb7bNQzqWekRX7pPK+2OLj3R922fo=" crossorigin="anonymous" />
+  <style type="text/css">
+
+    main {
+      display: flex;
+      min-height: 100vh;
+      align-items: center;
+    }
+
+    svg {
+      fill: #fff;
+      width: 484px;
+      height: 484px;
+    }
+
+    text {
+      font-size: 18px;
+      text-anchor: middle;
+      font-family: 'Consolas', 'Lucida Console', 'Monaco';
+    }
+
+
+    #outer {
+      stroke: #3f3f3f;
+      stroke-width: 2px;
+    }
+
+    #strict-label {
+      fill: #8b8b8b;
+    }
+
+    #playarea {
+      display: none;
+    }
+
+    #red {
+      fill: #EA4335;
+    }
+
+    #blue {
+      fill: #4285F4;
+    }
+
+    #yellow {
+      fill: #FBBC05;
+    }
+
+    #green {
+      fill: #34A853;
+    }
+
+    #red, #blue,
+    #yellow, #green {
+      opacity: .5;
+    }
+
+    #status {
+      stroke: #3f3f3f;
+      stroke-width: 2.5px;
+    }
+
+    #counter {
+      font-size: 111px;
+    }
+
+    .inner {
+      fill: #3f3f3f;
+    }
+
+    .outer {
+      stroke: #3f3f3f;
+      stroke-width: 2px;
+    }
+
+    .link {
+      cursor: pointer;
+    }
+
+    .container-fluid {
+      text-align: center;
+    }
+
+    .ionicons {
+      color: #ababab;
+      cursor: pointer;
+      font-size: 81px;
+      font-family: "Ionicons";
+    }
+
+    /*@media (min-width: 900px) {
+      svg {
+        height: 484px;
+        width: 484px;
+      }
+    }*/
+
+  </style>
+  <script type="text/javascript">
+
+    class Simon {
+
+      constructor() {
+
+        this._seed = null;
+        this._timer = null;
+        this._state = false;
+        this._strict = false;
+
+        this.interval = 2000;
+        this.grace = 2750;
+
+        this.complexity = 4;
+        this.levels = 20;
+        this.seeds =
+          Simon.seed(this.levels, this.difficulty);
+
+      }
+
+      /**
+       * Returns a Boolean indicating
+       * strict mode status of current instance
+       */
+      get strict() {
+        return this._strict;
+      }
+
+      /**
+       * Toggle strict mode
+       */
+      set strict(boolean) {
+        // TODO check if `boolean` is a Boolean
+        this._strict = boolean;
+      }
+
+      /**
+       * Returns a randomly populated array
+       * within range zero (inclusive) to
+       * `limit` (exclusive) of length `length`
+       */
+      static seed(length, limit) {
+        const seeds = new Array(length);
+        for (let i = 0; i < length; i++)
+          seeds[i] = Math.floor(Math.random() * limit);
+        return seeds;
+      }
+
+    // DOM references
+    const node = {
+      strict: {}
+    };
+
+    // runtime variables
+    const simons = {
+      score: 0,
+      strike: 1,
+      seeds: [],
+      simon: null,
+      buttons: null,
+      interval: null
+    };
+
+    // on DOM ready
+    document.onreadystatechange = function() {
+      if (document.readyState === 'interactive') {
+
+        // associate DOM references
+        node.strict.toggle = document.getElementById('strict');
+        node.strict.label = document.getElementById('strict-label');
+        node.controls = document.getElementById('controls');
+        node.playarea = document.getElementById('playarea');
+        node.reset = document.getElementById('reset');
+        node.play = document.getElementById('play');
+        node.red = document.getElementById('red');
+        node.blue = document.getElementById('blue');
+
+        node.yellow = document.getElementById('yellow');
+        node.green = document.getElementById('green');
+        node.counter = document.getElementById('counter');
+
+        // initialise a Simon game
+        simons.simon = new Simon();
+
+        // build an array of input buttons
+        // for index referencing
+        simons.buttons = [node.red, node.blue, node.yellow, node.green];
+
+        // associate event handlers
+        // for control buttons
+        node.strict.toggle.onclick = toggle;
+        node.reset.onclick = reset;
+        node.play.onclick = play;
+
+        // associate event handlers
+        // for input buttons
+        node.red.onclick = validate;
+        node.blue.onclick = validate;
+        node.yellow.onclick = validate;
+        node.green.onclick = validate;
+
+      }
+    };
+
+    /**
+     *
+     */
+    function toggle(e) {
+      if (simons.simon.strict) {
+        node.strict.label.style.fill = '#8b8b8b';
+        node.strict.toggle.style.transform = 'scaleX(1)';
+        node.strict.toggle.attributes.x.value = '50%';
+      } else {
+        node.strict.label.style.fill = '#fff';
+        node.strict.toggle.style.transform = 'scaleX(-1)';
+        node.strict.toggle.attributes.x.value = '-50%';
+      }
+      simons.simon.strict = !simons.simon.strict;
+    }
+
+    /**
+     *
+     */
+    function reset(e) {
+      clearInterval(simons.interval);
+      simons.simon = new Simon();
+      simons.score = 0;
+      node.playarea.style.display = 'none';
+      node.controls.style.display = 'block';
+      node.strict.label.style.fill = '#8b8b8b';
+      node.strict.toggle.style.transform = 'scaleX(1)';
+      node.strict.toggle.attributes.x.value = '50%';
+    }
+
+    /**
+     *
+     */
+    function play(e) {
+
+      node.controls.style.display = 'none';
+      node.playarea.style.display = 'block';
+
+    }
+
+    /**
+     *
+     */
+    function validate(e) {
+
+    }
+
+    function invalid() {
+      render(node.counter, '!');
+    }
+
+    /**
+     * Returns a resolved promise after `n` milliseconds
+     */
+    function sleep(milliseconds) {
+      return new Promise(resolve => setTimeout(resolve, milliseconds));
+    }
+
+    /**
+     * Fully opaque the parameterised `element`
+     * for specified `n` milliseconds timespan
+     */
+    async function illuminate(element, perpetuation) {
+      element.style.opacity = '1';
+      await sleep(perpetuation);
+      element.style.opacity = '';
+    }
+
+    /**
+     * Changes text content of the parameterised `element`
+     * with given `content` after `n` milliseconds (default: 0 ms)
+     */
+    async function render(element, content, interlude = 0) {
+      await sleep(interlude);
+      element.textContent = content;
+    }
+
+  </script>
+</head>
+<body>
+  <main>
+    <div class="container-fluid">
+      <svg>
+        <circle cx="50%" cy="50%" r="48%" class="outer" />
+        <circle cx="50%" cy="50%" r="47%" class="inner" />
+        <g id="controls">
+          <text x="50%" y="42.5%" id="strict" class="ionicons">&#xf355;</text>
+          <text x="50%" y="45%" id="strict-label">strict</text>
+          <text x="50%" y="70%" id="play" class="ionicons">&#xf215;</text>
+        </g>
+        <g id="playarea">
+          <defs>
+            <clipPath id="sector-red">
+              <rect x="50.25%" y="0%" width="50%" height="49.75%" />
+            </clipPath>
+            <clipPath id="sector-blue">
+              <rect x="50.25%" y="50.25%" width="50%" height="50%" />
+            </clipPath>
+            <clipPath id="sector-yellow">
+              <rect x="0%" y="50.25%" width="49.75%" height="50%" />
+            </clipPath>
+            <clipPath id="sector-green">
+              <rect x="0%" y="0%" width="49.75%" height="49.75%" />
+            </clipPath>
+          </defs>
+          <circle cx="50%" cy="50%" r="46.5%" id="red" class="link" clip-path="url(#sector-red)" />
+          <circle cx="50%" cy="50%" r="46.5%" id="blue" class="link" clip-path="url(#sector-blue)" />
+          <circle cx="50%" cy="50%" r="46.5%" id="yellow" class="link" clip-path="url(#sector-yellow)" />
+          <circle cx="50%" cy="50%" r="46.5%" id="green" class="link" clip-path="url(#sector-green)" />
+          <circle cx="50%" cy="50%" r="27.5%" class="outer" />
+          <circle cx="50%" cy="50%" r="26.5%" class="inner" />
+          <text x="50%" y="50%" id="counter">0</text>
+          <text x="50%" y="72.5%" id="reset" class="ionicons">&#xf49a;</text>
+        </g>
+      </svg>
+    </div>
+  </main>
+</body>
+</html>
