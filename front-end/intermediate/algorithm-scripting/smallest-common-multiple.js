@@ -30,9 +30,7 @@ function smallestCommons(arr) {
  */
 function gcd(a, b) {
   while (b > 0) {
-    let tmp = a;
-    a = b;
-    b = tmp % b;
+    [a, b] = [b, a % b];
   }
   return a;
 }
