@@ -16,6 +16,7 @@
   <meta content="Ashen M. Gunaratne is a computer science undergraduate student in the School of Engineering and Applied Sciences of Harvard University" name="description" />
   <meta content="ashen m. gunaratne freecodecamp projects intermediate" name="keywords" />
   <meta content="Ashen Gunaratne" name="author" />
+  <meta content="autoRotate:disabled" http-equiv="ScreenOrientation" />
   <title>Personal Portfolio</title>
   <link rel="alternate" type="text/html" href="https://codepen.io/ashenm/full/rrNJAB" />
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous" />
@@ -56,6 +57,10 @@
       border-bottom-color: #fff;
     }
 
+    .btn-compact {
+      padding: .25rem .5625rem;
+    }
+
     .contact {
       font-size: 75px;
       font-family: "Lato", "Lucida Grande", "Lucida Sans Unicode", Tahoma, Sans-Serif;
@@ -67,16 +72,34 @@
     }
 
     /**
-     * hide navbar branding and
-     * center nav elements on mobile
+     * hide navbar branding and center
+     * bottom nav elements on mobile
      */
     @media (max-width: 512px) {
       #nav-main {
+        bottom: 0;
+        top: unset;
         padding: 0px;
         justify-content: center;
       }
-      .navbar-brand {
+      #nav-main .navbar-brand {
         display: none;
+      }
+      #nav-main .active,
+      #nav-main .nav-link {
+        border-bottom: unset;
+      }
+    }
+
+    /**
+     * lessen margins on mobile landscape
+     */
+    @media (max-width: 800px) and (orientation: landscape) {
+      #nav-main .nav-link {
+        padding: .125rem .25rem!important;
+      }
+      .shrink-on-landscape {
+        margin-bottom: .25rem!important;
       }
     }
 
@@ -124,34 +147,35 @@
         </div>
 
         <div class="section">
-          <h4></h4>
-          <img alt="photo" width="200" height="200" class="m-3 img-fluid rounded-circle" src="https://avatars2.githubusercontent.com/u/16164426?v=4" />
-          <p>Ashen Gunaratne is is a computer science undergraduate student in the <a href="https://www.seas.harvard.edu" target="_blank">School of Engineering and Applied Sciences of Harvard University</a>. He completed his primary education at <a href="https://www.sebsmoratuwa.lk">St. Sebastian's College</a> and secondary education at <a href="https://www.lakeland.edu.lk">Lakeland Inter-American School</a>.</p>
+          <h2 class="sr-only">about</h2>
+          <img alt="photo" width="200" height="200" class="m-3 img-fluid rounded-circle shrink-on-landscape" src="https://avatars2.githubusercontent.com/u/16164426?v=4" />
+          <p class="shrink-on-landscape">Ashen Gunaratne is is a computer science undergraduate student in the <a href="https://www.seas.harvard.edu" target="_blank">School of Engineering and Applied Sciences of Harvard University</a>. He completed his primary education at <a href="https://www.sebsmoratuwa.lk">St. Sebastian's College</a> and secondary education at <a href="https://www.lakeland.edu.lk">Lakeland Inter-American School</a>.</p>
+          <a href="/resume" hreflang="en" target="_blank" class="btn btn-secondary btn-compact rounded m-2">Résumé</a>
         </div>
 
         <div class="section">
-          <h4></h4>
+          <h2 class="sr-only">portfolio</h2>
           <div class="row">
             <div class="col-6 col-sm">
-              <a class="no-decoration" href="https://codepen.io/ashenm" target="_blank" rel="">
+              <a class="no-decoration" href="https://codepen.io/ashenm" target="_blank" rel="author">
                 <i class="ion-social-codepen-outline contact"></i>
                 <h4>Codepen</h4>
               </a>
             </div>
             <div class="col-6 col-sm">
-              <a class="no-decoration" href="https://github.com/ashenm" target="_blank" rel="">
+              <a class="no-decoration" href="https://github.com/ashenm" target="_blank" rel="author">
                 <i class="ion-social-github-outline contact"></i>
                 <h4>GitHub</h4>
               </a>
             </div>
             <div class="col-6 col-sm">
-              <a class="no-decoration" href="https://glitch.com/@ashenm" target="_blank" rel="">
+              <a class="no-decoration" href="https://glitch.com/@ashenm" target="_blank" rel="author">
                 <i class="ion-social-nodejs contact"></i>
                 <h4>Glitch</h4>
               </a>
             </div>
             <div class="col-6 col-sm">
-              <a class="no-decoration" href="https://repl.it/@ashenm" target="_blank" rel="">
+              <a class="no-decoration" href="https://repl.it/@ashenm" target="_blank" rel="author">
                 <i class="ion-code-working contact"></i>
                 <h4>repl.it</h4>
               </a>
@@ -160,28 +184,28 @@
         </div>
 
         <div class="section">
-          <h4></h4>
+          <h2 class="sr-only">contact</h2>
           <div class="row">
             <div class="col">
-              <a href="mailto:mail@ashenm.ml"><i class="ion-ios-email-outline contact"></i></a>
+              <a href="mailto:mail@ashenm.ml" rel="author"><i class="ion-ios-email-outline contact"></i></a>
             </div>
             <div class="col">
-              <a href="https://www.ashenm.ml" target="_blank"><i class="ion-earth contact"></i></a>
+              <a href="https://www.ashenm.ml" target="_blank" rel="author"><i class="ion-earth contact"></i></a>
             </div>
             <div class="col">
-              <a href="https://www.instagram.com/_ashenm" target="_blank"><i class="ion-social-instagram-outline contact"></i></a>
+              <a href="https://www.instagram.com/_ashenm" target="_blank" rel="author"><i class="ion-social-instagram-outline contact"></i></a>
             </div>
             <div class="col">
-              <a href="https://www.linkedin.com/in/ashenm" target="_blank"><i class="ion-social-linkedin-outline contact"></i></a>
+              <a href="https://www.linkedin.com/in/ashenm" target="_blank" rel="author"><i class="ion-social-linkedin-outline contact"></i></a>
             </div>
             <div class="col">
-              <a href="https://www.reddit.com/user/_ashenm" target="_blank"><i class="ion-social-reddit-outline contact"></i></a>
+              <a href="https://www.reddit.com/user/_ashenm" target="_blank" rel="author"><i class="ion-social-reddit-outline contact"></i></a>
             </div>
             <div class="col">
-              <a href="https://www.twitter.com/_ashenm" target="_blank"><i class="ion-social-twitter-outline contact"></i></a>
+              <a href="https://www.twitter.com/_ashenm" target="_blank" rel="author"><i class="ion-social-twitter-outline contact"></i></a>
             </div>
             <div class="col">
-              <a href="https://plus.google.com/u/0/102805278145349967250" target="_blank"><i class="ion-social-googleplus-outline contact"></i></a>
+              <a href="https://plus.google.com/u/0/102805278145349967250" target="_blank" rel="author"><i class="ion-social-googleplus-outline contact"></i></a>
             </div>
           </div>
         </div>
